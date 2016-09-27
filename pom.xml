@@ -111,7 +111,7 @@
     <!-- 
     Java versions
     -->
-    <project.java.src.version>1.7</project.java.src.version>
+    <project.java.src.version>1.8</project.java.src.version>
     <enforced.java.version>${project.java.src.version}</enforced.java.version>
     <groovy.version>2.4.5</groovy.version>
     
@@ -131,7 +131,7 @@
     <!--
     core artifacts
     -->
-    <hadoop.version>2.7.1</hadoop.version>
+    <hadoop.version>3.0.0-alpha2-SNAPSHOT</hadoop.version>
 
     <hbase.version>0.99.0</hbase.version>
     <accumulo.version>1.7.0</accumulo.version>
@@ -151,13 +151,13 @@
     <easymock.version>3.1</easymock.version>
     <guava.version>11.0.2</guava.version>
     <gson.version>2.2.2</gson.version>
-    <guice.version>3.0</guice.version>
+    <guice.version>4.0</guice.version>
 
     <jackson.version>1.9.13</jackson.version>
     <jcommander.version>1.30</jcommander.version>
 
     <jetty.version>6.1.26</jetty.version>
-    <jersey.version>1.9</jersey.version>
+    <jersey.version>1.19</jersey.version>
     <servlet-api.version>2.5</servlet-api.version>
     <jsr311-api.version>1.1.1</jsr311-api.version>
     <jaxb-api.version>2.2.7</jaxb-api.version>
@@ -225,7 +225,7 @@
 
     <!-- build options-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <build.dependency.fail.on.warning>true</build.dependency.fail.on.warning>
+    <build.dependency.fail.on.warning>false</build.dependency.fail.on.warning>
     <build.redirect.test.output.to.file>false</build.redirect.test.output.to.file>
     
     <!-- github options-->
@@ -1592,6 +1592,16 @@
       </build>
     </profile>
 
+    <!-- MEDEA system -->
+    <profile>
+      <id>medea</id>
+      <properties>
+        <project.java.src.version>1.8</project.java.src.version>
+        <hadoop.version>3.0.0-alpha2-SNAPSHOT</hadoop.version>
+      </properties>
+    </profile>
+
+
     <profile>
       <!-- 2.6 snapshots -->
       <id>branch-2.6</id>
@@ -1654,9 +1664,7 @@
       <id>java8</id>
       <properties>
         <project.java.src.version>1.8</project.java.src.version>
-<!--
         <jersey.version>1.19</jersey.version>
--->
       </properties>
     </profile>
     

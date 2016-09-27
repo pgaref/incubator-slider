@@ -20,6 +20,7 @@ package org.apache.slider.server.appmaster.model.mock
 
 import org.apache.hadoop.yarn.api.records.Container
 import org.apache.hadoop.yarn.api.records.ContainerId
+import org.apache.hadoop.yarn.api.records.ExecutionType
 import org.apache.hadoop.yarn.api.records.NodeId
 import org.apache.hadoop.yarn.api.records.Priority
 import org.apache.hadoop.yarn.api.records.Resource
@@ -52,5 +53,15 @@ class MockContainer extends Container {
     return "MockContainer{ id=$id" +
            ", nodeHttpAddress='$nodeHttpAddress'," +
            " priority=$priority }"
+  }
+
+  @Override
+  ExecutionType getExecutionType() {
+    return null
+  }
+
+  @Override
+  void setExecutionType(ExecutionType executionType) {
+
   }
 }

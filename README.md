@@ -18,6 +18,13 @@
 # Slider
 
 
+### Custom Hadoop-3.0.0 version
+**Medea** compatibility
+Build Slider Command:
+
+    mvn -Pmedea clean package -DskipTests
+
+
 Slider is a YARN application to deploy existing distributed applications on YARN, 
 monitor them and make them larger or smaller as desired -even while 
 the cluster is running.
