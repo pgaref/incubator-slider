@@ -24,6 +24,12 @@ Build Slider Command:
 
     mvn -Pmedea clean package -DskipTests
 
+### HBase 1.2.3 build
+
+    wget http://apache.mirror.anlx.net/hbase/1.2.3/hbase-1.2.3-bin.tar.gz
+    mv hbase-1.2.3-bin.tar.gz hbase-1.2.3.tar.gz
+    mvn clean package -Phbase-app-package -Dhbase.version=1.2.3 -Dpkg.version=1.2.3 -Dpkg.name=hbase-1.2.3.tar.gz -Dpkg.src=/Users/pgaref/Downloads/ -DskipTests
+
 
 Slider is a YARN application to deploy existing distributed applications on YARN, 
 monitor them and make them larger or smaller as desired -even while 
