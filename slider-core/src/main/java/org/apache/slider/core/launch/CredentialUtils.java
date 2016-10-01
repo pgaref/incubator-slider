@@ -91,7 +91,7 @@ public final class CredentialUtils {
       try {
         //Support Hadoop legacy
         conf.set(Credentials.HADOOP_CREDENTIALS_FILE_FORMAT_KEY,
-                Credentials.FORMAT_JAVA);
+                Credentials.FORMAT_PB);
         credentials.writeTokenStorageToStream(dob, conf);
       } finally {
         dob.close();
@@ -167,7 +167,7 @@ public final class CredentialUtils {
         new FileOutputStream(file))) {
       //Support Hadoop legacy
       conf.set(Credentials.HADOOP_CREDENTIALS_FILE_FORMAT_KEY,
-              Credentials.FORMAT_JAVA);
+              Credentials.FORMAT_PB);
       credentials.writeTokenStorageToStream(daos, conf);
     }
   }
