@@ -18,13 +18,13 @@
 # Slider
 
 
-### Custom Hadoop-3.0.0 version
+### Custom Hadoop-2.7.2-MEDEA version
 **Medea** compatibility
 Build Slider Command:
 
     mvn -Pmedea clean package -DskipTests
 
-### HBase 1.2.3 build
+### HBase 1.2.3 custom-build
 
     wget http://apache.mirror.anlx.net/hbase/1.2.3/hbase-1.2.3-bin.tar.gz
     mv hbase-1.2.3-bin.tar.gz hbase-1.2.3.tar.gz
