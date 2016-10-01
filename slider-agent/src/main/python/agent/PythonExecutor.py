@@ -163,6 +163,9 @@ class PythonExecutor:
   def python_command(self, script, script_params):
     #we need manually pass python executable on windows because sys.executable will return service wrapper
     python_binary = os.environ['PYTHON_EXE'] if 'PYTHON_EXE' in os.environ else sys.executable
+    if not python_binary:
+      python_binary = '/usr/bin/python'
+      self.agentToggleLogger.log( " Unable to determine python interpreter from sys.executable. Using /usr/bin/python default. python_bin")
     python_command = [python_binary, "-S", script] + script_params
     return python_command
 
