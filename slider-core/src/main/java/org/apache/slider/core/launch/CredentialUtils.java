@@ -85,10 +85,14 @@ public final class CredentialUtils {
    */
   public static ByteBuffer marshallCredentials(Credentials credentials) throws IOException {
     ByteBuffer buffer = null;
+    Configuration conf = new Configuration();
     if (!credentials.getAllTokens().isEmpty()) {
       DataOutputBuffer dob = new DataOutputBuffer();
       try {
-        credentials.writeTokenStorageToStream(dob);
+        //Support Hadoop legacy
+        conf.set(Credentials.HADOOP_CREDENTIALS_FILE_FORMAT_KEY,
+                Credentials.FORMAT_JAVA);
+        credentials.writeTokenStorageToStream(dob, conf);
       } finally {
         dob.close();
       }
@@ -158,9 +162,13 @@ public final class CredentialUtils {
    */
   public static void saveTokens(File file,
       Credentials credentials) throws IOException {
+    Configuration conf = new Configuration();
     try(DataOutputStream daos = new DataOutputStream(
         new FileOutputStream(file))) {
-      credentials.writeTokenStorageToStream(daos);
+      //Support Hadoop legacy
+      conf.set(Credentials.HADOOP_CREDENTIALS_FILE_FORMAT_KEY,
+              Credentials.FORMAT_JAVA);
+      credentials.writeTokenStorageToStream(daos, conf);
     }
   }
 
