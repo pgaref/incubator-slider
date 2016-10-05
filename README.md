@@ -28,7 +28,12 @@ Build Slider Command:
 
     wget http://apache.mirror.anlx.net/hbase/1.2.3/hbase-1.2.3-bin.tar.gz
     mv hbase-1.2.3-bin.tar.gz hbase-1.2.3.tar.gz
-    mvn clean package -Phbase-app-package -Dhbase.version=1.2.3 -Dpkg.version=1.2.3 -Dpkg.name=hbase-1.2.3.tar.gz -Dpkg.src=/Users/pgaref/Downloads/ -DskipTests
+    mvn clean package -Phbase-app-package -Dhbase.version=1.2.3 -Dpkg.version=1.2.3 -Dpkg.name=hbase-1.2.3.tar.gz -Dpkg.src=/home/pg1712/Downloads -DskipTests
+
+### Storm 1.0.2 custom build
+
+    wget http://mirror.ox.ac.uk/sites/rsync.apache.org/storm/apache-storm-1.0.2/apache-storm-1.0.2.tar.gz
+    mvn clean package -Pstorm-app-package -Dpkg.version=1.0.2 -Dpkg.name=apache-storm-1.0.2.tar.gz -Dpkg.src=/home/pg1712/Downloads -DskipTests
 
 
 Slider is a YARN application to deploy existing distributed applications on YARN, 
