@@ -32,8 +32,8 @@ Build Slider Command:
 
 ### Storm 1.0.2 custom build
 
-    wget http://mirror.ox.ac.uk/sites/rsync.apache.org/storm/apache-storm-1.0.2/apache-storm-1.0.2.tar.gz
-    mvn clean package -Pstorm-app-package -Dpkg.version=1.0.2 -Dpkg.name=apache-storm-1.0.2.tar.gz -Dpkg.src=/home/pg1712/Downloads -DskipTests
+    wget http://www-us.apache.org/dist/storm/apache-storm-0.9.3/apache-storm-0.9.3.tar.gz
+    mvn clean package -Pstorm-app-package -Dpkg.version=0.9.3 -Dpkg.name=apache-storm-0.9.3.tar.gz -Dpkg.src=/home/pg1712/Downloads -DskipTests
 
 
 Slider is a YARN application to deploy existing distributed applications on YARN, 
