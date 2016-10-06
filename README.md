@@ -30,7 +30,7 @@ Build Slider Command:
     mv hbase-1.2.3-bin.tar.gz hbase-1.2.3.tar.gz
     mvn clean package -Phbase-app-package -Dhbase.version=1.2.3 -Dpkg.version=1.2.3 -Dpkg.name=hbase-1.2.3.tar.gz -Dpkg.src=/home/pg1712/Downloads -DskipTests
 
-### Storm 1.0.2 custom build
+### Storm 0.9.3 custom build
 
     wget http://www-us.apache.org/dist/storm/apache-storm-0.9.3/apache-storm-0.9.3.tar.gz
     mvn clean package -Pstorm-app-package -Dpkg.version=0.9.3 -Dpkg.name=apache-storm-0.9.3.tar.gz -Dpkg.src=/home/pg1712/Downloads -DskipTests
