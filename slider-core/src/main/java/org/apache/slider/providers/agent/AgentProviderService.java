@@ -1365,19 +1365,47 @@ public class AgentProviderService extends AbstractProviderService implements
       String portNo = port.getValue();
       log.info("Recording allocated port for {} as {}", portname, portNo);
 
-      // add the allocated ports to the global list as well as per container list
-      // per container allocation will over-write each other in the global
-      this.getAllocatedPorts().put(portname, portNo);
-      this.getAllocatedPorts(containerId).put(portname, portNo);
-      if (instance != null) {
-        try {
-          // if the returned value is not a single port number then there are no
-          // meaningful way for Slider to use it during export
-          // No need to error out as it may not be the responsibility of the component
-          // to allocate port or the component may need an array of ports
-          instance.registerPortEndpoint(Integer.valueOf(portNo), portname);
-        } catch (NumberFormatException e) {
-          log.warn("Failed to parse {}", portNo, e);
+      if(portNo.contains(",")){
+        String portTmp = portNo;
+        portTmp = portTmp.replaceAll("\\[", "");
+        portTmp = portTmp.replaceAll("\\]", "");
+        String [] portNums = portTmp.split(",");
+//        for(int i =0; i< portNums.length; i++)
+//        {
+          String portNoMatch = portNums[0];
+          // add the allocated ports to the global list as well as per container list
+          // per container allocation will over-write each other in the global
+          this.getAllocatedPorts().put(portname, portNo);
+          this.getAllocatedPorts(containerId).put(portname, portNo);
+          if (instance != null) {
+            try {
+              // if the returned value is not a single port number then there are no
+              // meaningful way for Slider to use it during export
+              // No need to error out as it may not be the responsibility of the component
+              // to allocate port or the component may need an array of ports
+              instance.registerPortEndpoint(Integer.valueOf(portNoMatch), portname);
+            } catch (NumberFormatException e) {
+              log.warn("Failed to parse {} - {}", portNo, portNoMatch, e);
+            }
+          }
+//        }
+
+      }
+      else {
+        // add the allocated ports to the global list as well as per container list
+        // per container allocation will over-write each other in the global
+        this.getAllocatedPorts().put(portname, portNo);
+        this.getAllocatedPorts(containerId).put(portname, portNo);
+        if (instance != null) {
+          try {
+            // if the returned value is not a single port number then there are no
+            // meaningful way for Slider to use it during export
+            // No need to error out as it may not be the responsibility of the component
+            // to allocate port or the component may need an array of ports
+            instance.registerPortEndpoint(Integer.valueOf(portNo), portname);
+          } catch (NumberFormatException e) {
+            log.warn("Failed to parse {}", portNo, e);
+          }
         }
       }
     }
