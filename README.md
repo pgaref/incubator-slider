@@ -31,7 +31,9 @@ Build Slider Command:
     mvn clean package -Phbase-app-package -Dhbase.version=1.2.3 -Dpkg.version=1.2.3 -Dpkg.name=hbase-1.2.3.tar.gz -Dpkg.src=/home/pg1712/Downloads -DskipTests
 
 ### Storm 0.10.0.2.3.2.0-2950 custom
-    # Download package from HT website and make sure service.py python_bin is fixed! 
+    # Download package from HT website and make sure service.py python_bin is fixed!
+     http://code.ithunder.org/hdp/HDP/ubuntu14/2.x/updates/2.3.2.0/slider-app-packages/storm/
+     
 
 
 Slider is a YARN application to deploy existing distributed applications on YARN, 
