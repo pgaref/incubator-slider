@@ -1596,7 +1596,7 @@
     <profile>
       <id>medea</id>
       <properties>
-        <project.java.src.version>1.8</project.java.src.version>
+        <project.java.src.version>1.7</project.java.src.version>
         <hadoop.version>2.7.2-MEDEA</hadoop.version>
       </properties>
     </profile>
