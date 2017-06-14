@@ -166,6 +166,10 @@ public final class RoleStatus implements Cloneable, MetricSet {
     return hasPlacementPolicy(PlacementPolicy.ANTI_AFFINITY_REQUIRED);
   }
 
+  public boolean isAffinePlacement() {
+    return hasPlacementPolicy(PlacementPolicy.AFFINITY_REQUIRED);
+  }
+
   public boolean hasPlacementPolicy(int policy) {
     return 0 != (getPlacementPolicy() & policy);
   }
@@ -438,6 +442,11 @@ public final class RoleStatus implements Cloneable, MetricSet {
     if (isAntiAffinePlacement()) {
       sb.append(", pendingAntiAffineRequests=").append(pendingAntiAffineRequests);
       sb.append(", outstandingAArequest=").append(outstandingAArequest);
+    }
+    sb.append(", isAffinePlacement=").append(isAffinePlacement());
+    if (isAntiAffinePlacement()) {
+      sb.append(", pendingAffineRequests=").append(pendingAntiAffineRequests);
+      sb.append(", outstandingArequest=").append(outstandingAArequest);
     }
     sb.append(", failureMessage='").append(failureMessage).append('\'');
     sb.append(", providerRole=").append(providerRole);

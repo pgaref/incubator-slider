@@ -17,6 +17,9 @@
 
 # Slider
 
+### InteliJ integration
+Make sure to install AVRO plugin if you want to run tests from the IDE
+
 
 ### Custom Hadoop-2.7.2-MEDEA version
 **Medea** compatibility

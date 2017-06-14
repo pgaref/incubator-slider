@@ -20,10 +20,7 @@ package org.apache.slider.core.launch;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.Credentials;
-import org.apache.hadoop.yarn.api.records.ApplicationId;
-import org.apache.hadoop.yarn.api.records.ApplicationSubmissionContext;
-import org.apache.hadoop.yarn.api.records.Priority;
-import org.apache.hadoop.yarn.api.records.Resource;
+import org.apache.hadoop.yarn.api.records.*;
 import org.apache.hadoop.yarn.client.api.YarnClientApplication;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.hadoop.yarn.exceptions.YarnException;
@@ -34,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -99,10 +97,34 @@ public class AppMasterLauncher extends AbstractLauncher {
       submissionContext.setApplicationTags(applicationTags);
     }
     submissionContext.setNodeLabelExpression(extractLabelExpression(options));
+    // MEDEA - Add always the constaint - if we take advantage of it just add the Tags!
+    submissionContext.setConstraintDefinition(createAffinityConstraintDefinition());
 
     extractAmRetryCount(submissionContext, resourceGlobalOptions);
     extractResourceRequirements(resource, options);
     extractLogAggregationContext(resourceGlobalOptions);
+  }
+
+  public ConstraintDefinition createAffinityConstraintDefinition(){
+    // Create affinity rule
+    final PlacementConstraint placementConstraint =
+            PlacementConstraint.newInstance("RegionServer", "RegionServer",
+                    PlacementConstraintType.AFFINITY, PlacementConstraintScope.NODE);
+    final PlacementConstraintsExpression placementConstraintsExpression =
+            PlacementConstraintsExpression
+                    .newInstance(new ArrayList<PlacementConstraint>() {
+                      {
+                        add(placementConstraint);
+                      }
+                    });
+    final ConstraintDefinition constraintDefinition =
+            ConstraintDefinition.newInstance(System.currentTimeMillis(),
+                    new ArrayList<PlacementConstraintsExpression>() {
+                      {
+                        add(placementConstraintsExpression);
+                      }
+                    });
+    return constraintDefinition;
   }
 
   public void setMaxAppAttempts(int maxAppAttempts) {

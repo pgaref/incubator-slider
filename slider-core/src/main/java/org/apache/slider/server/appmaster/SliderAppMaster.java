@@ -754,7 +754,7 @@ public class SliderAppMaster extends AbstractSliderLaunchedService
       registryOperations = startRegistryOperationsService();
       log.info(registryOperations.toString());
 
-      //build the role map
+      //build the role map  - we know placement constraints after this point
       List<ProviderRole> providerRoles = new ArrayList<>(providerService.getRoles());
       providerRoles.addAll(SliderAMClientProvider.ROLES);
 

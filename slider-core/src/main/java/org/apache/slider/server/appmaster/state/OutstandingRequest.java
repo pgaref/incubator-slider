@@ -32,7 +32,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Tracks an outstanding request. This is used to correlate an allocation response
@@ -220,6 +222,7 @@ public final class OutstandingRequest extends RoleHostnamePair {
     boolean strictPlacement = role.isStrictPlacement();
     NodeInstance target = this.node;
     String nodeLabels;
+    Set<String> allocationTags  = new HashSet<>();
 
     if (isAntiAffine()) {
       int size = nodes.size();
@@ -237,7 +240,8 @@ public final class OutstandingRequest extends RoleHostnamePair {
       mayEscalate = false;
       relaxLocality = false;
       nodeLabels = null;
-    } else if (target != null) {
+    }
+    else if (target != null) {
       // placed request. Hostname is used in request
       hosts = new String[1];
       hosts[0] = target.hostname;
@@ -260,7 +264,13 @@ public final class OutstandingRequest extends RoleHostnamePair {
       // and forbid it happening
       mayEscalate = false;
       nodeLabels = label;
+      // MEDEA stuff
+      if(role.isAffinePlacement() ){
+        // This is the only case we add the TAgs - To be used by the scheduler
+        allocationTags.add("RegionServer");
+      }
     }
+
     Priority pri = ContainerPriority.createPriority(roleId, !relaxLocality);
     priority = pri.getPriority();
     issuedRequest = new AMRMClient.ContainerRequest(resource,
@@ -268,7 +278,8 @@ public final class OutstandingRequest extends RoleHostnamePair {
                                       null,
                                       pri,
                                       relaxLocality,
-                                      nodeLabels);
+                                      nodeLabels,
+                                      allocationTags);
     validate();
     return issuedRequest;
   }

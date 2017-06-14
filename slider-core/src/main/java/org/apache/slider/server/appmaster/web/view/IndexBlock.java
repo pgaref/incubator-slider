@@ -47,6 +47,7 @@ import static org.apache.slider.server.appmaster.web.rest.RestPaths.LIVE_COMPONE
 
 /**
  * The main content on the Slider AM web page
+ * What we show is here! MEDEA team
  */
 public class IndexBlock extends SliderHamletBlock {
   private static final Logger log = LoggerFactory.getLogger(IndexBlock.class);
@@ -154,7 +155,21 @@ public class IndexBlock extends SliderHamletBlock {
         } else if (aaRequestOutstanding) {
           aaRoleWithOpenRequest++;
         }
-      } else {
+      }
+      else if(status.isAffinePlacement()) {
+        boolean aaRequestOutstanding = status.isAARequestOutstanding();
+        int pending = (int)status.getPendingAntiAffineRequests();
+        aatext = buildAffDetails(aaRequestOutstanding, pending);
+        if (SliderUtils.isSet(status.getLabelExpression())) {
+          aatext += " (label: " + status.getLabelExpression() + ")";
+        }
+        if (pending > 0 && !aaRequestOutstanding) {
+          aaRoleWithNoSuitableLocations ++;
+        } else if (aaRequestOutstanding) {
+          aaRoleWithOpenRequest++;
+        }
+      }
+      else {
         if (SliderUtils.isSet(status.getLabelExpression())) {
           aatext = "label: " + status.getLabelExpression();
         } else {
@@ -232,9 +247,16 @@ public class IndexBlock extends SliderHamletBlock {
 
   @VisibleForTesting
   String buildAADetails(boolean outstanding, int pending) {
-    return String.format("Anti-affinity:%s %d pending %s",
+    return String.format("MEDEA Anti-affinity:%s %d pending %s",
       (outstanding ? " 1 active request and" : ""),
       pending, plural(pending, "request"));
+  }
+
+  @VisibleForTesting
+  String buildAffDetails(boolean outstanding, int pending) {
+    return String.format("MEDEA Affinity:%s %d pending %s",
+            (outstanding ? " 1 active request and" : ""),
+            pending, plural(pending, "request"));
   }
 
   private String plural(int n, String singular) {

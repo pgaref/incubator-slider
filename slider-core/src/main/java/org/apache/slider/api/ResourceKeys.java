@@ -113,7 +113,7 @@ public interface ResourceKeys {
   String COMPONENT_PRIORITY = "yarn.role.priority";
   
   /**
-   * placement policy
+   * placement policy - extended for MEDEA
    */
   String COMPONENT_PLACEMENT_POLICY = "yarn.component.placement.policy";
 
