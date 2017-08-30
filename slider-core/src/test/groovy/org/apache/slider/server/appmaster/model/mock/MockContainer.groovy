@@ -53,4 +53,14 @@ class MockContainer extends Container {
            ", nodeHttpAddress='$nodeHttpAddress'," +
            " priority=$priority }"
   }
+
+  @Override
+  String getNodeLogicIp() {
+    return null
+  }
+
+  @Override
+  void setNodeLogicIp(String logicIP) {
+
+  }
 }

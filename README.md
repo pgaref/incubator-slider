@@ -17,6 +17,25 @@
 
 # Slider
 
+### InteliJ integration
+Make sure to install AVRO plugin if you want to run tests from the IDE
+
+
+### Custom Hadoop-2.7.1.2 MEDEA version
+Build Slider Command:
+
+    mvn clean package -DskipTests
+
+### HBase 1.2.3 custom-build
+
+    wget http://apache.mirror.anlx.net/hbase/1.2.3/hbase-1.2.3-bin.tar.gz
+    mv hbase-1.2.3-bin.tar.gz hbase-1.2.3.tar.gz
+    mvn clean package -Phbase-app-package -Dhbase.version=1.2.3 -Dpkg.version=1.2.3 -Dpkg.name=hbase-1.2.3.tar.gz -Dpkg.src=/home/pgaref/Downloads -DskipTests
+
+### Storm 0.10.0.2.3.2.0-2950 custom
+    # Download package from HT website and make sure service.py python_bin is fixed!
+     http://code.ithunder.org/hdp/HDP/ubuntu14/2.x/updates/2.3.2.0/slider-app-packages/storm/
+
 
 Slider is a YARN application to deploy existing distributed applications on YARN, 
 monitor them and make them larger or smaller as desired -even while 

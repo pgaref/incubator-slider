@@ -19,6 +19,7 @@
 package org.apache.slider.server.appmaster.model.mock
 
 import org.apache.hadoop.yarn.api.records.Resource
+import org.apache.hadoop.yarn.api.records.ValueRanges
 
 class MockResource extends Resource {
   int memory
@@ -44,5 +45,15 @@ class MockResource extends Resource {
 
   public long getMemorySize() {
     return memory
+  }
+
+  @Override
+  ValueRanges getPorts() {
+    return null
+  }
+
+  @Override
+  void setPorts(ValueRanges ports) {
+
   }
 }
