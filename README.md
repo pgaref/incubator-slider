@@ -29,12 +29,12 @@ Build Slider Command:
 ### HBase 1.2.3 custom-build
 
     wget http://apache.mirror.anlx.net/hbase/1.2.3/hbase-1.2.3-bin.tar.gz
-    mv hbase-1.2.3-bin.tar.gz hbase-1.2.3.tar.gz
     mvn clean package -Phbase-app-package -Dhbase.version=1.2.3 -Dpkg.version=1.2.3 -Dpkg.name=hbase-1.2.3.tar.gz -Dpkg.src=/home/pgaref/Downloads -DskipTests
 
-### Storm 0.10.0.2.3.2.0-2950 custom
-    # Download package from HT website and make sure service.py python_bin is fixed!
-     http://code.ithunder.org/hdp/HDP/ubuntu14/2.x/updates/2.3.2.0/slider-app-packages/storm/
+### Storm 1.1.1 custom-build
+    Find Storm 0.10.0.2.3.2.0-2950.tar locally (the only version that could work without Nimbus issues)
+    mvn clean package -Pstorm-app-package -Dpkg.version=0.10.0.2.3.2.0-2950 -Dpkg.name=apache-storm-0.10.0.2.3.2.0-2950.tar.gz -Dpkg.src=/home/pgaref/Downloads -DskipTests
+    
 
 
 Slider is a YARN application to deploy existing distributed applications on YARN, 

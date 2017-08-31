@@ -34,6 +34,8 @@ def service(
   import status_params
 
   python_binary = os.environ['PYTHON_EXE'] if 'PYTHON_EXE' in os.environ else sys.executable
+  if not python_binary:
+    python_binary = '/usr/bin/python'
   pid_file = status_params.pid_files[name]
   container_id = status_params.container_id
   no_op_test = format("ls {pid_file} >/dev/null 2>&1 && ps `cat {pid_file}` >/dev/null 2>&1")
