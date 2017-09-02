@@ -33,20 +33,20 @@ FLAGS = tf.app.flags.FLAGS
 class Ymnist(YarnBootstrap):
   def worker_do(self, server, cluster_spec, task_id):
     print("Checkpoint dir: " + FLAGS.ckp_dir)
-    images, labels = self.inputs(100)
-    logits = mnist.inference(images, 128, 128)
+    images, labels = self.inputs(FLAGS.batch_size)
+    logits = mnist.inference(images, FLAGS.hidden1, FLAGS.hidden2)
     loss = mnist.loss(logits, labels)
-    train_op = mnist.training(loss, 0.01)
+    train_op = mnist.training(loss, FLAGS.learning_rate)
     target = "" if server == "" else server.target
     with tf.train.MonitoredTrainingSession(
-        master=target,
-        is_chief=(task_id == 0),
-        checkpoint_dir=FLAGS.ckp_dir) as sess:
-        step = 0
-        while not sess.should_stop() and step < 1000000:
-          sess.run(train_op)
-          step = training_util.global_step(sess, training_util.get_global_step(sess.graph))
-          print("Global step " + str(step))
+            master=target,
+            is_chief=(task_id == 0),
+            checkpoint_dir=FLAGS.ckp_dir) as sess:
+      step = 0
+      while not sess.should_stop() and step < FLAGS.steps:
+        sess.run(train_op)
+        step = training_util.global_step(sess, training_util.get_global_step(sess.graph))
+        print("Global step " + str(step))
 
   def ps_do(self, server, cluster_spec, task_id):
     print("Starting ps " + str(task_id))
@@ -70,7 +70,7 @@ class Ymnist(YarnBootstrap):
     return image, label
 
   def inputs(self, batch_size):
-    filename = os.path.join("hdfs://hdpdev/user/danrtsey.wy/mnist-data", "train.tfrecords")
+    filename = os.path.join(FLAGS.data_dir, "train.tfrecords")
     with tf.name_scope('input'):
       filename_queue = tf.train.string_input_producer([filename])
       image, label = self.read_and_decode(filename_queue)

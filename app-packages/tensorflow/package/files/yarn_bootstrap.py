@@ -32,8 +32,19 @@ flags.DEFINE_string("job_name", None, "job name: worker or ps")
 flags.DEFINE_integer("task_index", 0, "Worker task index, should be >= 0")
 flags.DEFINE_string("ps_hosts", "", "Comma-separated list of hostname:port pairs")
 flags.DEFINE_string("worker_hosts", "", "Comma-separated list of hostname:port pairs")
-flags.DEFINE_string("ckp_dir", None, "Directory for storing the checkpoints")
 flags.DEFINE_string("work_dir", "/tmp/tf_on_yarn", "Work directory")
+
+# Training related flags
+flags.DEFINE_string("ckp_dir", None, "Directory for storing the checkpoints")
+flags.DEFINE_string("data_dir", None,"Directory where train data is stored")
+flags.DEFINE_integer("hidden1", 128,
+                     "Number of units in the 1st hidden layer of the NN")
+flags.DEFINE_integer("hidden2", 128,
+                     "Number of units in the 2nd hidden layer of the NN")
+flags.DEFINE_integer("batch_size", 100, "Training batch size")
+flags.DEFINE_float("learning_rate", 0.01, "Learning rate")
+flags.DEFINE_integer("steps", 1000000, "Number of global steps")
+
 
 FLAGS = flags.FLAGS
 
@@ -50,6 +61,14 @@ class YarnBootstrap(object):
   @abstractmethod
   def ps_do(self, server, cluster_spec, task_id):
     pass
+
+  def normalize_hosts(self, hosts):
+    to_return = []
+    for host in hosts:
+      ip_port = host.split(':')
+      ip = ip_port[0].split('.')[0]
+      to_return.append("{0}:{1}".format(ip, ip_port[1]))
+    return to_return
 
   def device_and_server(self):
     # If FLAGS.job_name is not set, we're running single-machine TensorFlow.
@@ -68,8 +87,8 @@ class YarnBootstrap(object):
       raise ValueError("Must specify an explicit `worker_hosts`")
 
     cluster_spec = tf.train.ClusterSpec({
-      "ps": FLAGS.ps_hosts.split(","),
-      "worker": FLAGS.worker_hosts.split(","),
+      "ps": self.normalize_hosts(FLAGS.ps_hosts.split(",")),
+      "worker": self.normalize_hosts(FLAGS.worker_hosts.split(",")),
     })
     server = tf.train.Server(
       cluster_spec, job_name=FLAGS.job_name, task_index=FLAGS.task_index)

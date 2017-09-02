@@ -22,6 +22,15 @@
 * Hadoop 2.6.5
 * Docker image ytensorflow:0.2.1, [Dockerfile](https://github.com/tensorflow/ecosystem/blob/master/docker/Dockerfile.hdfs)
 
+# Prepare environment
+1. Docker Image build (on every cluster machine):  
+        `docker build -t "ytensorflow:0.2.1" -f Dockerfile .`
+2. Load pre-processed mnist-data on HDFS:     
+        `hadoop fs -copyFromLocal dfs://cisl-linux-090/mnist-data`
+3. Give permission to model checkpoint path:     
+        ` hadoop fs -chmod 777 hdfs://cisl-linux-090/user/hadoop/tsOnYarn`
+
+
 # Use slider to run a tensorflow cluster
 1. Make sure slider could work well, see the [Slider Start](https://slider.incubator.apache.org/docs/getting_started.html)
 2. Download app-packages/tensorflow to $SLIDER_HOME/app-packages/tensorflow

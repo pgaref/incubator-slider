@@ -74,12 +74,12 @@
           "scriptType": "PYTHON"
         }
       }
-    ],
-    "packages": [
-      {
-        "type": "folder",
-        "name": "files"
-      }
     ]
+//    "packages": [
+//      {
+//        "type": "folder",
+//        "name": "files"
+//      }
+//    ]
   }
 }

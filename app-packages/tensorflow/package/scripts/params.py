@@ -31,6 +31,7 @@ registry_zk = config['configurations']['global']['zookeeper.quorum']
 
 user_scripts_entry = config['configurations']['global']['user.scripts.entry']
 user_checkpoint_prefix = config['configurations']['global']['user.checkpoint.prefix']
+user_data_dir = config['configurations']['global']['user.data.dir']
 
 docker_image = config['configurations']['global']['docker.image']
 
