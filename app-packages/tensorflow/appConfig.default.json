@@ -6,7 +6,7 @@
     "site.global.hadoop.conf": "/home/hadoop/yarn-dev-panos/conf",
     "site.global.yarn.cgroup.root": "/hadoop-yarn",
     "site.global.user.scripts.entry": "ymnist.py",
-    "site.global.user.data.dir": "hdfs://cisl-linux-090/mnist-data",
+    "site.global.user.data.dir": "hdfs://cisl-linux-090/user/hadoop/mnist-data",
     "site.global.user.checkpoint.prefix": "hdfs://cisl-linux-090/user/${USER_NAME}/tsOnYarn",
     "site.global.user.name": "${USER_NAME}",
     "site.global.zookeeper.quorum": "${ZK_HOST}",

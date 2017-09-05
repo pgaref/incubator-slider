@@ -20,15 +20,17 @@
 * Linux Kernel 3.10.0
 * Docker 1.12.3
 * Hadoop 2.6.5
-* Docker image ytensorflow:0.2.1, [Dockerfile](https://github.com/tensorflow/ecosystem/blob/master/docker/Dockerfile.hdfs)
+* Docker image based on ytensorflow:0.2.1, [Dockerfile](https://github.com/tensorflow/ecosystem/blob/master/docker/Dockerfile.hdfs)
 
 # Prepare environment
-1. Docker Image build (on every cluster machine):  
+1. Go to Docker image path [Dockerfile](/packages/files/)  
+         `cd tensorflow/packages/files/`
+2. Build Image (on every cluster machine):  
         `docker build -t "ytensorflow:0.2.1" -f Dockerfile .`
-2. Load pre-processed mnist-data on HDFS:     
+3. Load pre-processed mnist-data on HDFS:     
         `hadoop fs -copyFromLocal dfs://cisl-linux-090/mnist-data`
-3. Give permission to model checkpoint path:     
-        ` hadoop fs -chmod 777 hdfs://cisl-linux-090/user/hadoop/tsOnYarn`
+4. Give permissions to model checkpoint path:     
+        `hadoop fs -chmod 777 hdfs://cisl-linux-090/user/hadoop/tsOnYarn`
 
 
 # Use slider to run a tensorflow cluster
@@ -47,12 +49,13 @@ slider create [app-name] --appdef . --template appConfig.default.json --resource
 # Use ytensorflow to run a tensorflow cluster
 ## Introduction
 ytensorflow(tensorflow on YARN admin client), is used to submit and manage tensorflow cluster on YARN. It aims to make submit more easier.
+Give execution persmissions to ytensoflow before typing any command. (chmod +x ytensorflow) 
 ## Command
 ```
-ytensorflow cluster -start ./config.json -files ./mnist.py
-ytensorflow cluster -stop <appName>
-ytensorflow cluster -status <appName>
-ytensorflow version
+./ytensorflow cluster -start ./config.default.json -files ../package/files/ymnist.py
+./ytensorflow cluster -stop <appName> .i.e tfdocker1
+./ytensorflow cluster -status <appName> i.e. tfdocker1
+./ytensorflow version
 ```
 
 # User scripts requirements
