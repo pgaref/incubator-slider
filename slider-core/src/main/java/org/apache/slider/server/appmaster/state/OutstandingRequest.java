@@ -21,6 +21,7 @@ package org.apache.slider.server.appmaster.state;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import org.apache.hadoop.yarn.api.records.ExecutionTimeEstimate;
 import org.apache.hadoop.yarn.api.records.Priority;
 import org.apache.hadoop.yarn.api.records.Resource;
 import org.apache.hadoop.yarn.client.api.AMRMClient;
@@ -32,7 +33,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Tracks an outstanding request. This is used to correlate an allocation response
@@ -206,8 +209,9 @@ public final class OutstandingRequest extends RoleHostnamePair {
    * @param time time in millis to record as request time
    * @return the request to raise
    */
+  static int countainerCount = 1;
   public synchronized AMRMClient.ContainerRequest buildContainerRequest(
-      Resource resource, RoleStatus role, long time) {
+      Resource resource, RoleStatus role, long time, Set<String> allocationTags) {
     Preconditions.checkArgument(resource != null, "null `resource` arg");
     Preconditions.checkArgument(role != null, "null `role` arg");
 
@@ -268,7 +272,9 @@ public final class OutstandingRequest extends RoleHostnamePair {
                                       null,
                                       pri,
                                       relaxLocality,
-                                      nodeLabels);
+                                      nodeLabels,
+                                      ExecutionTimeEstimate.newInstance(),
+                                      allocationTags);
     validate();
     return issuedRequest;
   }

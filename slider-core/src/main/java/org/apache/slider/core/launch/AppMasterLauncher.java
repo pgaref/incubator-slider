@@ -20,10 +20,7 @@ package org.apache.slider.core.launch;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.Credentials;
-import org.apache.hadoop.yarn.api.records.ApplicationId;
-import org.apache.hadoop.yarn.api.records.ApplicationSubmissionContext;
-import org.apache.hadoop.yarn.api.records.Priority;
-import org.apache.hadoop.yarn.api.records.Resource;
+import org.apache.hadoop.yarn.api.records.*;
 import org.apache.hadoop.yarn.client.api.YarnClientApplication;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.hadoop.yarn.exceptions.YarnException;
@@ -34,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -99,6 +97,8 @@ public class AppMasterLauncher extends AbstractLauncher {
       submissionContext.setApplicationTags(applicationTags);
     }
     submissionContext.setNodeLabelExpression(extractLabelExpression(options));
+    // MEDEA - Always propagate ALL the constraints - use the allocation Tags dynamically
+    submissionContext.setConstraintDefinition(createConstraintDefinition());
 
     extractAmRetryCount(submissionContext, resourceGlobalOptions);
     extractResourceRequirements(resource, options);
@@ -229,5 +229,33 @@ public class AppMasterLauncher extends AbstractLauncher {
     sar.queue = queue;
     sar.submitTime = submitTime;
     return sar;
+  }
+
+  public ConstraintDefinition createConstraintDefinition(){
+    // Create All Contraint rules
+    ArrayList<PlacementConstraint> placementConstraints = new ArrayList<>();
+    final PlacementConstraint affPlacementConstraint =
+            PlacementConstraint.newInstance("sliderAffinity", "sliderAffinity",
+                    PlacementConstraintType.AFFINITY, PlacementConstraintScope.NODE);
+    placementConstraints.add(affPlacementConstraint);
+    final PlacementConstraint antiAffPlacementConstraint =
+            PlacementConstraint.newInstance("sliderAntiAffinity", "sliderAntiAffinity",
+                    PlacementConstraintType.ANTI_AFFINITY, PlacementConstraintScope.NODE);
+    placementConstraints.add(antiAffPlacementConstraint);
+    final PlacementConstraint cardPlacementConstraint =
+            PlacementConstraint.newInstance("sliderCardinality", "4",
+                    PlacementConstraintType.CARDINALITY, PlacementConstraintScope.NODE);
+    placementConstraints.add(cardPlacementConstraint);
+    // Single expression is supported for the time being
+    final PlacementConstraintsExpression placementConstraintsExpression =
+            PlacementConstraintsExpression.newInstance(placementConstraints);
+    final ConstraintDefinition constraintDefinition =
+            ConstraintDefinition.newInstance(System.currentTimeMillis(),
+                    new ArrayList<PlacementConstraintsExpression>() {
+                      {
+                        add(placementConstraintsExpression);
+                      }
+                    });
+    return constraintDefinition;
   }
 }

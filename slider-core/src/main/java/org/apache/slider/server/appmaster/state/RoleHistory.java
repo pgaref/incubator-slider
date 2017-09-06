@@ -43,13 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -641,6 +635,28 @@ public class RoleHistory {
 
   /**
    * Request an instance on a given node.
+   * An outstanding request is created & tracked, with the
+   * relevant node entry for that role updated.
+   *<p>
+   * The role status entries will also be tracked
+   * <p>
+   * Returns the request that is now being tracked.
+   * If the node instance is not null, it's details about the role is incremented
+   *
+   * @param node node to target or null for "any"
+   * @param role role to request
+   * @param allocationTags MEDEA allocationTags
+   * @return the request
+   */
+  public synchronized OutstandingRequest requestInstanceOnNode(
+          NodeInstance node, RoleStatus role, Resource resource, Set<String> allocationTags) {
+    OutstandingRequest outstanding = outstandingRequests.newRequest(node, role.getKey());
+    outstanding.buildContainerRequest(resource, role, now(), allocationTags);
+    return outstanding;
+  }
+
+  /**
+   * Request an instance on a given node.
    * An outstanding request is created & tracked, with the 
    * relevant node entry for that role updated.
    *<p>
@@ -656,7 +672,7 @@ public class RoleHistory {
   public synchronized OutstandingRequest requestInstanceOnNode(
       NodeInstance node, RoleStatus role, Resource resource) {
     OutstandingRequest outstanding = outstandingRequests.newRequest(node, role.getKey());
-    outstanding.buildContainerRequest(resource, role, now());
+    outstanding.buildContainerRequest(resource, role, now(), new HashSet<String>());
     return outstanding;
   }
 
@@ -669,9 +685,31 @@ public class RoleHistory {
    */
   public synchronized OutstandingRequest requestContainerForRole(RoleStatus role) {
 
-    if (role.isAntiAffinePlacement()) {
+   if (role.isMEDEAntiffinityPlacement()){
+      Resource resource = recordFactory.newResource();
+      role.copyResourceRequirements(resource);
+      Set<String> allocationTags = new HashSet<>();
+      allocationTags.add("sliderAntiAffinity");
+      return requestInstanceOnNode(null, role, resource, allocationTags);
+    }
+    else if (role.isMEDEAffinityPlacement()){
+      Resource resource = recordFactory.newResource();
+      role.copyResourceRequirements(resource);
+      Set<String> allocationTags = new HashSet<>();
+      allocationTags.add("sliderAffinity");
+      return requestInstanceOnNode(null, role, resource, allocationTags);
+    }
+    else if (role.isMEDEACardinalityPlacement()){
+      Resource resource = recordFactory.newResource();
+      role.copyResourceRequirements(resource);
+      Set<String> allocationTags = new HashSet<>();
+      allocationTags.add("sliderCardinality");
+      return requestInstanceOnNode(null, role, resource, allocationTags);
+    }
+    else if (role.isAntiAffinePlacement()) {
       return requestContainerForAARole(role);
-    } else {
+    }
+    else {
       Resource resource = recordFactory.newResource();
       role.copyResourceRequirements(resource);
       NodeInstance node = findRecentNodeForNewInstance(role);
@@ -692,7 +730,7 @@ public class RoleHistory {
           role.getKey(), nodes, role.getLabelExpression());
       Resource resource = recordFactory.newResource();
       role.copyResourceRequirements(resource);
-      outstanding.buildContainerRequest(resource, role, now());
+      outstanding.buildContainerRequest(resource, role, now(), new HashSet<String>());
       return outstanding;
     } else {
       log.warn("No suitable location for {}", role.getName());

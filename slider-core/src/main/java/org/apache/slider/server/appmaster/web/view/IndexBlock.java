@@ -143,10 +143,11 @@ public class IndexBlock extends SliderHamletBlock {
       String roleName = status.getName();
       String nameUrl = apiPath(LIVE_COMPONENTS) + "/" + roleName;
       String aatext;
-      if (status.isAntiAffinePlacement()) {
+      if (status.isAntiAffinePlacement() || status.isMEDEAntiffinityPlacement()
+              || status.isMEDEAffinityPlacement() || status.isMEDEACardinalityPlacement()) {
         boolean aaRequestOutstanding = status.isAARequestOutstanding();
         int pending = (int)status.getPendingAntiAffineRequests();
-        aatext = buildAADetails(aaRequestOutstanding, pending);
+        aatext = buildAADetails(aaRequestOutstanding, pending, status);
         if (SliderUtils.isSet(status.getLabelExpression())) {
           aatext += " (label: " + status.getLabelExpression() + ")";
         }
@@ -266,10 +267,19 @@ public class IndexBlock extends SliderHamletBlock {
   }
 
   @VisibleForTesting
-  String buildAADetails(boolean outstanding, int pending) {
+  String buildAADetails(boolean outstanding, int pending, RoleStatus status) {
+    if(status.isMEDEAntiffinityPlacement()) {
+      return String.format("MEDEA Anti-affinity");
+    }
+    if(status.isMEDEAffinityPlacement()) {
+      return String.format("MEDEA Affinity");
+    }
+    if(status.isMEDEACardinalityPlacement()) {
+      return String.format("MEDEA Cardinality");
+    }
     return String.format("Anti-affinity:%s %d pending %s",
-      (outstanding ? " 1 active request and" : ""),
-      pending, plural(pending, "request"));
+            (outstanding ? " 1 active request and" : ""),
+            pending, plural(pending, "request"));
   }
 
   private String plural(int n, String singular) {

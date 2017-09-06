@@ -2169,7 +2169,29 @@ public class AppState {
       // more workers needed than we have -ask for more
       log.info("{}: Asking for {} more nodes(s) for a total of {} ", name, delta, expected);
 
-      if (role.isAntiAffinePlacement()) {
+
+      if (role.isMEDEAntiffinityPlacement()){
+        log.info("MEDEA anti-affine container request");
+        for (int i = 0; i < delta; i++) {
+          //get the role history to select a suitable node, if available
+          addContainerRequest(operations, createContainerRequest(role));
+        }
+      }
+      else if (role.isMEDEAffinityPlacement()){
+        log.info("MEDEA affine container request");
+        for (int i = 0; i < delta; i++) {
+          //get the role history to select a suitable node, if available
+          addContainerRequest(operations, createContainerRequest(role));
+        }
+      }
+      else if (role.isMEDEACardinalityPlacement()){
+        log.info("MEDEA cardinality container request");
+        for (int i = 0; i < delta; i++) {
+          //get the role history to select a suitable node, if available
+          addContainerRequest(operations, createContainerRequest(role));
+        }
+      }
+      else if (role.isAntiAffinePlacement()) {
         long pending = delta;
         if (roleHistory.canPlaceAANodes()) {
           // build one only if there is none outstanding, the role history knows

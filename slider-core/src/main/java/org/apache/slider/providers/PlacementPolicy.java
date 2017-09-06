@@ -55,6 +55,22 @@ public class PlacementPolicy {
    * Anti-affinity is mandatory.
    */
   public static final int ANTI_AFFINITY_REQUIRED = 4;
+
+
+  /**
+   * MEDEA - Affinity is mandatory.
+   */
+  public static final int MEDEA_AFFINITY_REQUIRED = 5;
+
+  /**
+   * MEDEA - AntiAffinity is mandatory.
+   */
+  public static final int MEDEA_ANTI_AFFINITY_REQUIRED = 6;
+
+  /**
+   * MEDEA - Cardinality (1-4) is mandatory.
+   */
+  public static final int MEDEA_CARDINALITY_REQUIRED = 7;
   
   /**
    * Exclude from flexing; used internally to mark AMs.

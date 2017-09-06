@@ -166,7 +166,19 @@ public final class RoleStatus implements Cloneable, MetricSet {
   }
 
   public boolean isAntiAffinePlacement() {
-    return hasPlacementPolicy(PlacementPolicy.ANTI_AFFINITY_REQUIRED);
+    return (getPlacementPolicy() ==(PlacementPolicy.ANTI_AFFINITY_REQUIRED));
+  }
+
+  public boolean isMEDEAffinityPlacement(){
+   return  (getPlacementPolicy() == PlacementPolicy.MEDEA_AFFINITY_REQUIRED);
+  }
+
+  public boolean isMEDEAntiffinityPlacement(){
+    return (getPlacementPolicy() == PlacementPolicy.MEDEA_ANTI_AFFINITY_REQUIRED);
+  }
+
+  public boolean isMEDEACardinalityPlacement(){
+    return  (getPlacementPolicy() == PlacementPolicy.MEDEA_CARDINALITY_REQUIRED);
   }
 
   public boolean hasPlacementPolicy(int policy) {
@@ -455,6 +467,9 @@ public final class RoleStatus implements Cloneable, MetricSet {
       sb.append(", pendingAntiAffineRequests=").append(pendingAntiAffineRequests);
       sb.append(", outstandingAArequest=").append(outstandingAArequest);
     }
+    sb.append(", isMEDEAntiAffinePlacement=").append(isMEDEAntiffinityPlacement());
+    sb.append(", isMEDEAffinePlacement=").append(isMEDEAffinityPlacement());
+    sb.append(", isMEDEACardinalityPlacement=").append(isMEDEACardinalityPlacement());
     sb.append(", failureMessage='").append(failureMessage).append('\'');
     sb.append(", providerRole=").append(providerRole);
     sb.append(", failedContainers=").append(failedContainers);
