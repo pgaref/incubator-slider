@@ -231,7 +231,7 @@ public class AppMasterLauncher extends AbstractLauncher {
     return sar;
   }
 
-  public ConstraintDefinition createConstraintDefinition(){
+  public static ConstraintDefinition createConstraintDefinition(){
     // Create All Contraint rules
     ArrayList<PlacementConstraint> placementConstraints = new ArrayList<>();
     final PlacementConstraint affPlacementConstraint =
@@ -243,7 +243,7 @@ public class AppMasterLauncher extends AbstractLauncher {
                     PlacementConstraintType.ANTI_AFFINITY, PlacementConstraintScope.NODE);
     placementConstraints.add(antiAffPlacementConstraint);
     final PlacementConstraint cardPlacementConstraint =
-            PlacementConstraint.newInstance("sliderCardinality", "4",
+            PlacementConstraint.newInstance("sliderCardinality", "8",
                     PlacementConstraintType.CARDINALITY, PlacementConstraintScope.NODE);
     placementConstraints.add(cardPlacementConstraint);
     // Single expression is supported for the time being

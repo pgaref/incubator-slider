@@ -18,6 +18,8 @@ package org.apache.slider.server.appmaster.web.view;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.inject.Inject;
+import org.apache.hadoop.yarn.api.records.ConstraintDefinition;
+import org.apache.hadoop.yarn.api.records.PlacementConstraintsExpression;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet.DIV;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet.LI;
@@ -28,6 +30,7 @@ import org.apache.slider.api.types.ApplicationDiagnostics;
 import org.apache.slider.api.types.ApplicationLivenessInformation;
 import org.apache.slider.api.types.ContainerInformation;
 import org.apache.slider.common.tools.SliderUtils;
+import org.apache.slider.core.launch.AppMasterLauncher;
 import org.apache.slider.core.registry.docstore.ExportEntry;
 import org.apache.slider.core.registry.docstore.PublishedExports;
 import org.apache.slider.core.registry.docstore.PublishedExportsSet;
@@ -275,7 +278,8 @@ public class IndexBlock extends SliderHamletBlock {
       return String.format("MEDEA Affinity");
     }
     if(status.isMEDEACardinalityPlacement()) {
-      return String.format("MEDEA Cardinality");
+      PlacementConstraintsExpression cd = AppMasterLauncher.createConstraintDefinition().getPlacementConstraintsExpressions().iterator().next();
+      return String.format("MEDEA Cardinality: %s", cd.getPlacementConstraints().get(cd.getPlacementConstraints().size()-1).getTarget());
     }
     return String.format("Anti-affinity:%s %d pending %s",
             (outstanding ? " 1 active request and" : ""),
