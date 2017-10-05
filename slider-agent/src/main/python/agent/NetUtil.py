@@ -42,11 +42,11 @@ class NetUtil:
     try:
       parsedurl = urlparse(url)
 
-      # if sys.version_info >= (2,7,9):
-      import ssl
-      ca_connection = httplib.HTTPSConnection(parsedurl[1], context=ssl._create_unverified_context())
-      # else:
-      #   ca_connection = httplib.HTTPSConnection(parsedurl[1])
+      if sys.version_info >= (2,7,9):
+        import ssl
+        ca_connection = httplib.HTTPSConnection(parsedurl[1], context=ssl._create_unverified_context())
+      else:
+        ca_connection = httplib.HTTPSConnection(parsedurl[1])
 
       ca_connection.request("GET", parsedurl[2])
       response = ca_connection.getresponse()  
